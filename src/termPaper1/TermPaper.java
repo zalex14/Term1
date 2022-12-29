@@ -2,7 +2,7 @@ package termPaper1;
 
 public class TermPaper {
     // Создаем Employee, содержит информацию о ФИО, отделе, зарплате сотрудника. Отделы от 1 до 5.
-    private static final Employee[] staff = {
+    private static Employee[] staff = {
             new Employee(1, "Иванов Иван Иванович", 1, 20000),
             new Employee(2, "Петров Петр Петрович", 2, 21000),
             new Employee(3, "Сидоров Сидор Сидорович", 2, 22000),
@@ -28,7 +28,7 @@ public class TermPaper {
     public static int gettingSalaryFund() {                             // в рублях
         int fund = 0;
         for (Employee employee : staff) {
-            if (employee != null && employee.getSalary() > 0) {         // исключаем ошибки с отрицательной зарплатой
+            if (employee != null) {         // исключаем ошибки с отрицательной зарплатой
                 fund += employee.getSalary();
             }
         }
@@ -37,10 +37,10 @@ public class TermPaper {
 
     // Определяем сотрудника с минимальной зарплатой Задание 1.с
     public static Employee gettingStaffMinSalary() {
-        Employee result = staff[0];
-        int minSalary = staff[0].getSalary();
+        Employee result = null;
+        int minSalary = Integer.MAX_VALUE;
         for (Employee employee : staff) {
-            if (employee != null && employee.getSalary() > 0 && employee.getSalary() < minSalary) {  // исключаем ошибки с отрицательной зарплатой
+            if (employee != null && employee.getSalary() < minSalary) {  // исключаем ошибки с отрицательной зарплатой
                 minSalary = employee.getSalary();
                 result = employee;
             }
@@ -50,10 +50,10 @@ public class TermPaper {
 
     // Определяем сотрудника с максимальной зарплатой Задание 1.d
     public static Employee gettingStaffMaxSalary() {
-        Employee result = staff[0];
-        int maxSalary = staff[0].getSalary();
+        Employee result = null;
+        int maxSalary = Integer.MIN_VALUE;
         for (Employee employee : staff) {
-            if (employee != null && employee.getSalary() > 0 && employee.getSalary() > maxSalary) {  // исключаем ошибки с отрицательной зарплатой
+            if (employee != null && employee.getSalary() > maxSalary) {  // исключаем ошибки с отрицательной зарплатой
                 maxSalary = employee.getSalary();
                 result = employee;
             }
@@ -79,7 +79,7 @@ public class TermPaper {
     // Получаем список ФИО всех сотрудников 1.f
     public static void gettingStaffList() {
         for (Employee employee : staff) {
-            if (employee != null && !employee.getName().isEmpty()) {
+            if (employee != null) {
                 System.out.println(employee.getName());
             }
         }
@@ -89,7 +89,7 @@ public class TermPaper {
 // Индексируем зарплату сотрудников
     public static void indexingSalary(double rate) {
         for (Employee employee : staff) {
-            if (employee != null && employee.getSalary() > 0) {
+            if (employee != null) {
                 employee.setSalary((int) (employee.getSalary() * (1.00 + rate / 100.00)));
             }
         }
@@ -98,18 +98,11 @@ public class TermPaper {
     // Определяем сотрудника отдела с минимальной зарплатой
     public static Employee gettingDepartmentMinSalaryStaff(int department) {
         Employee result = null;
-        int minSalary = 0;
-        if (department > 0 && department <= 5) {
-            for (Employee employee : staff) {
-                if (employee != null && employee.getDepartment() == department && minSalary == 0) {
-                    minSalary = employee.getSalary();      // запоминаем первичное значение минимальной зарплаты из первого найденного сотрдника отдела
-                    result = employee;
-                }
-                if (employee != null && employee.getSalary() > 0 && employee.getSalary() < minSalary && employee.getDepartment() == department && employee.getSalary() < minSalary) {
-                    minSalary = employee.getSalary();
-                    result = employee;
-
-                }
+        int minSalary = Integer.MAX_VALUE;
+        for (Employee employee : staff) {
+            if (employee != null && employee.getDepartment() == department && employee.getSalary() < minSalary) {  // исключаем ошибки с отрицательной зарплатой
+                minSalary = employee.getSalary();
+                result = employee;
             }
         }
         return result;
@@ -118,18 +111,11 @@ public class TermPaper {
     // Определяем сотрудника отдела с максимальной зарплатой
     public static Employee gettingDepartmentMaxSalaryStaff(int department) {
         Employee result = null;
-        int maxSalary = 0;
-        if (department > 0 && department <= 5) {
-            for (Employee employee : staff) {
-                if (employee != null && employee.getDepartment() == department && maxSalary == 0) {
-                    maxSalary = employee.getSalary();      // запоминаем первичное значение минимальной зарплаты из первого найденного сотрдника отдела
-                    result = employee;
-                }
-                if (employee != null && employee.getSalary() > 0 && employee.getSalary() > maxSalary && employee.getDepartment() == department && employee.getSalary() > maxSalary) {
-                    maxSalary = employee.getSalary();
-                    result = employee;
-
-                }
+        int maxSalary = Integer.MIN_VALUE;
+        for (Employee employee : staff) {
+            if (employee != null && employee.getDepartment() == department && employee.getSalary() > maxSalary) {  // исключаем ошибки с отрицательной зарплатой
+                maxSalary = employee.getSalary();
+                result = employee;
             }
         }
         return result;
@@ -139,7 +125,7 @@ public class TermPaper {
     public static int gettingDepartmentFund(int department) {
         int fund = 0;
         for (Employee employee : staff) {
-            if (employee != null && employee.getSalary() > 0 && employee.getDepartment() == department) {
+            if (employee != null && employee.getDepartment() == department) {
                 fund += employee.getSalary();
             }
         }
@@ -154,17 +140,16 @@ public class TermPaper {
             if (employee != null && employee.getDepartment() == department) {
                 staffAmount++;
             }
-            if (staffAmount > 0 && employee.getDepartment() == department) {
-                averageSalary = gettingDepartmentFund(department) / (float) staffAmount;
-            }
         }
+        if (staffAmount > 0) { averageSalary = gettingDepartmentFund(department) / (float) staffAmount;
+            }
         return averageSalary;
     }
 
     // Индексируем зарплату сотрудникам отдела
     public static void indexingSalaryDepartment(double rate, int department) {
         for (Employee employee : staff) {
-            if (employee != null && employee.getSalary() > 0 && employee.getDepartment() == department) {
+            if (employee != null && employee.getDepartment() == department) {
                 employee.setSalary((int) (employee.getSalary() * (1.00 + rate / 100.00)));
             }
         }
@@ -173,7 +158,7 @@ public class TermPaper {
     // Получаем список сотрудников отдела
     public static void gettingStaffDepartment(int department) {
         for (Employee employee : staff) {
-            if (employee != null && !employee.getName().isEmpty() && employee.getDepartment() == department) {
+            if (employee != null && employee.getDepartment() == department) {
                 System.out.println(employee.outputStaffList());
             }
         }
@@ -182,7 +167,7 @@ public class TermPaper {
     // Получаем список сотрудников с зарплатой ниже пороговой величины
     public static void gettingStaffLessSalary(int salary) {
         for (Employee employee : staff) {
-            if (employee != null && !employee.getName().isEmpty() && employee.getSalary() <= salary) {
+            if (employee != null && employee.getSalary() <= salary) {
                 System.out.println(employee.outputStaffList());
             }
         }
@@ -191,7 +176,7 @@ public class TermPaper {
     // Получаем список сотрудников с зарплатой выше или равной пороговой величины
     public static void gettingStaffMoreSalary(int salary) {
         for (Employee employee : staff) {
-            if (employee != null && !employee.getName().isEmpty() && employee.getSalary() >= salary) {
+            if (employee != null && employee.getSalary() >= salary) {
                 System.out.println(employee.outputStaffList());
             }
         }
