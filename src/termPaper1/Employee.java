@@ -12,9 +12,15 @@ public class Employee {           // Создаем класс, информац
     public Employee(int id, String name, int department, int salary) {
         // добавляем подстановку и увеличение счетчика на 1
         this.id = idCount++;
-        this.name = name;
-        this.department = department;
-        this.salary = salary;
+        if (!name.isEmpty()) {
+            this.name = name;
+        }
+        if (department > 0 && department <= 5) {
+            this.department = department;
+        }
+        if (salary > 0) {
+            this.salary = salary;
+        }
     }
 
     // Геттеры всех полей класса
